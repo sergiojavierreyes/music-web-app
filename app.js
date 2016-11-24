@@ -18,9 +18,6 @@ app.use(session({
 	saveUninitialized: false
 }));
 
-ypi.playlistInfo("AIzaSyB643_Jt_IPP8c0ElYR43SVYYFyk-e0nd0", "PLTG9OTg_jhUxfzo8aPKvncqQt6RgUQgaK", function(playlistItems) {
-	console.log(playlistItems)
-})
 
 
 //Define database structure
@@ -37,18 +34,31 @@ let User = db.define('user', {
 })
 
 let Media = db.define('media', {
-
+	video: sequelize.STRING
 })
+
 
 //Define Relations
 
 app.get('/',(req,res)=>{
-	res.render('index')
+	//Loops through all videos
+	ypi.playlistInfo("AIzaSyB643_Jt_IPP8c0ElYR43SVYYFyk-e0nd0", "PLTG9OTg_jhUxfzo8aPKvncqQt6RgUQgaK", function(playlistItems) {
+		// console.log(playlistItems)
+		array = []
+		for (var i = playlistItems.length - 1; i >= 0; i--) {
+			// console.log(playlistItems[i].resourceId.videoId)
+			array.push(playlistItems[i].resourceId.videoId)
+		}
+		res.send(array)
+
+	})
+	// res.render('index')
 })
 
-db.sync({force: false}).then(db => {
-	console.log('We synced bruh!')
-})
+
+// db.sync({force: false}).then(db => {
+// 	console.log('We synced bruh!')
+// })
 
 app.listen(8000,()=>{
 	console.log("8000 IAM ALL THE WAY UP!")

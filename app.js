@@ -40,6 +40,14 @@ let Media = db.define('media', {
 let arrayFromYoutube = ypi.playlistInfo()
 console.log(arrayFromYoutube);
 
+let mediaInsert = (arrayFromYoutube) => {
+	for (var i = arrayFromYoutube.length - 1; i >= 0; i--) {
+		arrayFromYoutube[i]
+		
+	}
+}
+
+
 
 db.sync({force: false}).then(db => {
 	console.log('We synced bruh!')

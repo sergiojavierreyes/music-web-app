@@ -6,7 +6,7 @@ const pg = require ('pg')
 const bodyParser = require ('body-parser')
 const session = require('express-session');
 const ypi  = require ('youtube-playlist-info')
-const arrayStrip = require('./src/array_module.js')
+// const arrayStrip = require(__dirname + '/src/array_module')
 
 app.set('view engine', 'pug')
 app.set('views', __dirname + "/views")
@@ -18,6 +18,9 @@ app.use(session({
 	resave: true,
 	saveUninitialized: false
 }));
+
+
+
 
 //Define database structure
 let db = new sequelize('musicapp', process.env.POSTGRES_USER, process.env.POSTGRES_PASSWORD, {
@@ -36,20 +39,34 @@ let Media = db.define('media', {
 	video: sequelize.STRING
 })
 
+//Define Relations
 
-let arrayFromYoutube = ypi.playlistInfo()
-console.log(arrayFromYoutube);
 
-let mediaInsert = (arrayFromYoutube) => {
-	for (var i = arrayFromYoutube.length - 1; i >= 0; i--) {
-		arrayFromYoutube[i]
-		
+var globalFun =	ypi.playlistInfo("AIzaSyBqfoN0DrRKAlaqTvz8NoPCKDZkoaX5Zr8", "PLTG9OTg_jhUxfzo8aPKvncqQt6RgUQgaK", (playlistItems) => {
+	// let array = []
+	for (var i = playlistItems.length - 1; i >= 0; i--) {
+		// array.push(playlistItems[i].resourceId.videoId)
+		Media.create({
+			video: 'https://www.youtube.com/embed/' + playlistItems[i].resourceId.videoId
+		})
 	}
-}
+	ypi.playlistInfo()
+})
+
+
+app.get('/video', (req, res) =>{
+	Media.findAll({
+	}).then(show =>{
+		res.render('video', {
+			video: show
+		})
+	});
+});
 
 
 
-db.sync({force: false}).then(db => {
+
+db.sync({force: true}).then(db => {
 	console.log('We synced bruh!')
 })
 

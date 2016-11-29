@@ -21,7 +21,6 @@ app.use(session({
 
 
 
-
 //Define database structure
 let db = new sequelize('musicapp', process.env.POSTGRES_USER, process.env.POSTGRES_PASSWORD, {
 	server:'localhost',
@@ -40,6 +39,8 @@ let Media = db.define('media', {
 })
 
 //Define Relations
+User.hasMany(Media)
+Media.belongsTo(User)
 
 
 var globalFun =	ypi.playlistInfo("AIzaSyBqfoN0DrRKAlaqTvz8NoPCKDZkoaX5Zr8", "PLTG9OTg_jhUxfzo8aPKvncqQt6RgUQgaK", (playlistItems) => {
@@ -56,15 +57,14 @@ var globalFun =	ypi.playlistInfo("AIzaSyBqfoN0DrRKAlaqTvz8NoPCKDZkoaX5Zr8", "PLT
 
 app.get('/video', (req, res) =>{
 	Media.findAll({
+		order: [
+		sequelize.fn('Random')]
 	}).then(show =>{
 		res.render('video', {
 			video: show
 		})
 	});
 });
-
-
-
 
 db.sync({force: true}).then(db => {
 	console.log('We synced bruh!')

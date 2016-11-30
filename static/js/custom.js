@@ -19,7 +19,6 @@ $(document).ready(function(){
 	$('#update').click(function(){	
 		console.log('button clicked')
 		
-		// $('#' + counter).attr('src', allId[counter].src)
 		$('#' + counter).hide()
 		counter++
 		$('#' + counter).show()

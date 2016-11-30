@@ -6,7 +6,8 @@ const pg = require ('pg')
 const bodyParser = require ('body-parser')
 const session = require('express-session');
 const ypi  = require ('youtube-playlist-info')
-// const arrayStrip = require(__dirname + '/src/array_module')
+const GoogleStrategy = require('passport-google-oauth20').Strategy;
+const passport = require('passport');
 
 app.set('view engine', 'pug')
 app.set('views', __dirname + "/views")
@@ -21,7 +22,6 @@ app.use(session({
 
 
 
-
 //Define database structure
 let db = new sequelize('musicapp', process.env.POSTGRES_USER, process.env.POSTGRES_PASSWORD, {
 	server:'localhost',
@@ -29,10 +29,10 @@ let db = new sequelize('musicapp', process.env.POSTGRES_USER, process.env.POSTGR
 })
 
 //Create tables
-let User = db.define('user', {
-	name: sequelize.STRING,
+let Profile = db.define('profile', {
+	token: sequelize.STRING,
 	email: sequelize.STRING,
-	idtoken: sequelize.STRING
+	name: sequelize.STRING
 })
 
 let Media = db.define('media', {
@@ -40,6 +40,8 @@ let Media = db.define('media', {
 })
 
 //Define Relations
+Profile.hasMany(Media)
+Media.belongsTo(Profile)
 
 
 var globalFun =	ypi.playlistInfo("AIzaSyBqfoN0DrRKAlaqTvz8NoPCKDZkoaX5Zr8", "PLTG9OTg_jhUxfzo8aPKvncqQt6RgUQgaK", (playlistItems) => {
@@ -54,17 +56,18 @@ var globalFun =	ypi.playlistInfo("AIzaSyBqfoN0DrRKAlaqTvz8NoPCKDZkoaX5Zr8", "PLT
 })
 
 
+
+//Shows the selection of video's
 app.get('/video', (req, res) =>{
 	Media.findAll({
+		order: [
+		sequelize.fn('Random')]
 	}).then(show =>{
 		res.render('video', {
 			video: show
 		})
 	});
 });
-
-
-
 
 db.sync({force: true}).then(db => {
 	console.log('We synced bruh!')

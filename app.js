@@ -6,7 +6,7 @@ const pg = require ('pg')
 const bodyParser = require ('body-parser')
 const session = require('express-session');
 const ypi  = require ('youtube-playlist-info')
-const GoogleStrategy = require('passport-google-oauth20').Strategy;
+const GoogleStrategy = require('passport-google-oauth').OAuthStrategy;
 const passport = require('passport');
 
 app.set('view engine', 'pug')
@@ -20,6 +20,8 @@ app.use(session({
 	saveUninitialized: false
 }));
 
+app.use( passport.initialize());
+app.use( passport.session());
 
 
 //Define database structure
@@ -29,8 +31,8 @@ let db = new sequelize('musicapp', process.env.POSTGRES_USER, process.env.POSTGR
 })
 
 //Create tables
-let Profile = db.define('profile', {
-	token: sequelize.STRING,
+let User = db.define('user', {
+	gid: sequelize.STRING,
 	email: sequelize.STRING,
 	name: sequelize.STRING
 })
@@ -40,8 +42,8 @@ let Media = db.define('media', {
 })
 
 //Define Relations
-Profile.hasMany(Media)
-Media.belongsTo(Profile)
+User.hasMany(Media)
+Media.belongsTo(User)
 
 
 var globalFun =	ypi.playlistInfo("AIzaSyBqfoN0DrRKAlaqTvz8NoPCKDZkoaX5Zr8", "PLTG9OTg_jhUxfzo8aPKvncqQt6RgUQgaK", (playlistItems) => {

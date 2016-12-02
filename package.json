@@ -16,6 +16,8 @@
     "googleapis": "^14.2.0",
     "passport": "^0.3.2",
     "passport-google-oauth": "^1.0.0",
+    "passport-google-oauth2": "^0.1.6",
+    "passport-youtube-v3": "^2.0.0",
     "pg": "^6.1.0",
     "pug": "^2.0.0-beta6",
     "sequelize": "^3.27.0",

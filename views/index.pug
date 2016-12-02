@@ -1,18 +1,11 @@
 html
 	head
-		title ALT app
-		meta(name='google-signin-client_id', content='218840791548-b7d1m8nffcbnajhcagogff93imsqivvd.apps.googleusercontent.com')
+		title Node Authentication
 	body
-		if (!user)
-			p 
-			| Welcome! Please 
-			a(href='/login') log in
-			
-		else 
-			P Hello! user.username
-			p View your 
-			a(href='/profile') profile
+		h1 Node Authentication
+		p login with:
+		a(href='/auth/google') Google
 
-		script(src="/resources/js/jquery-3.1.1.min.js")
-		script(src="/resources/js/custom.js")
-		script(src='https://apis.google.com/js/platform.js', async='', defer='')
+	script(src="/resources/js/jquery-3.1.1.min.js")
+	script(src="/resources/js/custom.js")
+	script(src='https://apis.google.com/js/platform.js', async='', defer='')

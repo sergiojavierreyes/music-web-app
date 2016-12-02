@@ -1,10 +1,11 @@
 html
 	head
-		title ALT app
-		meta(name='google-signin-client_id', content='218840791548-b7d1m8nffcbnajhcagogff93imsqivvd.apps.googleusercontent.com')	
+		title ALT app	
 	body
-		h1 Welcome!
+		h1 Welcome! #{user.name}
+		p=user.name
+		p=user.id
 
-		script(src="/resources/js/jquery-3.1.1.min.js")
-		script(src="/resources/js/custom.js")
-		script(src='https://apis.google.com/js/platform.js', async='', defer='')
+	script(src="/resources/js/jquery-3.1.1.min.js")
+	script(src="/resources/js/custom.js")
+	script(src='https://apis.google.com/js/platform.js', async='', defer='')

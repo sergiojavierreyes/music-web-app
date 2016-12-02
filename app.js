@@ -113,21 +113,21 @@ function(accessToken, refreshToken, profile, done) {
 	User.findOne({ where: {'gid' : profile.id }}).then ((user) =>{
 		if (user) {
 
-                    // if a user is found, log them in
-                    return done(null, user.get({plain:true}))
-                } else {
+            // if a user is found, log them in
+            return done(null, user.get({plain:true}))
+        } else {
 
-                	User.create( {
-                		gid: profile.id,
-                		token: accessToken,
-                		email: profile.emails[0].value,
-                		name: profile.displayName
-                	}).then( (user) => {
-                		console.log( '\nResulting user:\n' )
-                		return done(null, user.get({plain:true}));
-                	} )
-                }
-            })
+        	User.create( {
+        		gid: profile.id,
+        		token: accessToken,
+        		email: profile.emails[0].value,
+        		name: profile.displayName
+        	}).then( (user) => {
+        		console.log( '\nResulting user:\n' )
+        		return done(null, user.get({plain:true}));
+        	} )
+        }
+    })
 }))
 
 

@@ -110,18 +110,26 @@ passport.use(new GoogleStrategy({
 function(accessToken, refreshToken, profile, done) {
 	console.log('\nGoogle profile\n')
 	console.log(profile)
+	User.findOne({ where: {'gid' : profile.id }}).then ((user) =>{
+		if (user) {
 
-	User.create( {
-		gid: profile.id,
-		token: accessToken,
-		email: profile.emails[0].value,
-		name: profile.displayName
-	}).then( (user) => {
-		console.log( '\nResulting user:\n' )
-		return done(null, user.get({plain:true}));
-	} )
-}
-));
+                    // if a user is found, log them in
+                    return done(null, user.get({plain:true}))
+                } else {
+
+                	User.create( {
+                		gid: profile.id,
+                		token: accessToken,
+                		email: profile.emails[0].value,
+                		name: profile.displayName
+                	}).then( (user) => {
+                		console.log( '\nResulting user:\n' )
+                		return done(null, user.get({plain:true}));
+                	} )
+                }
+            })
+}))
+
 
 
  // route for home page
@@ -162,7 +170,7 @@ app.get('/auth/google/callback', passport.authenticate('google', {
 })
 
 
-db.sync({force: true}).then(db => {
+db.sync({force: false}).then(db => {
 	console.log('We synced bruh!')
 })
 

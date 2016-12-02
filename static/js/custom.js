@@ -19,7 +19,7 @@ $(document).ready(function(){
 	$('#update').click(function(){	
 		console.log('button clicked')
 		
-		$('#' + counter).hide()
+		$('#' + counter).remove()
 		counter++
 		$('#' + counter).show()
 	})

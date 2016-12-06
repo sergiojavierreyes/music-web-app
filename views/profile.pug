@@ -4,8 +4,12 @@ html
 	body
 		a(href='/video') Music
 		a(href='/logout') Logout
-		h1 Welcome! #{user.name}
-		p=user.id
+		h1 Welcome #{user.name}!
+		p=user.gid
+
+		h3 My Faves!
+		each thing in like
+			p=thing.likedvideo
 
 	script(src="/resources/js/jquery-3.1.1.min.js")
 	script(src="/resources/js/custom.js")

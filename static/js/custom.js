@@ -1,6 +1,7 @@
 $(document).ready(function(){
 	console.log('Loaded!')
 
+	
 	let allId = $('.video')
 	console.log(allId)
 
@@ -18,9 +19,20 @@ $(document).ready(function(){
 
 	$('#update').click(function(){	
 		console.log('button clicked')
-		
+
 		$('#' + counter).remove()
 		counter++
 		$('#' + counter).show()
+	})
+
+	$('#add').click(function(){	
+		var video = {video: $('.video').attr('src')}
+		console.log(video)
+		$.post('/favevideo',video ,(data)=>{
+			console.log("YOOO:"+data)
+			$('#' + counter).remove()
+			counter++
+			$('#' + counter).show()
+		})
 	})
 })

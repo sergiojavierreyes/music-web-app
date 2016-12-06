@@ -26,15 +26,15 @@ app.use(session({
 app.use( passport.initialize());
 app.use( passport.session());
 
- // route middleware to make sure a user is logged in
- function isLoggedIn(req, res, next) {
+// route middleware to make sure a user is logged in
+function isLoggedIn(req, res, next) {
 
-    // if user is authenticated in the session, carry on
-    if (req.isAuthenticated())
-    	return next();
+// if user is authenticated in the session, carry on
+if (req.isAuthenticated())
+	return next();
 
-    // if they aren't redirect them to the home page
-    res.redirect('/');
+// if they aren't redirect them to the home page
+res.redirect('/');
 }
 
 
@@ -49,26 +49,36 @@ let User = db.define('user', {
 	gid: sequelize.STRING,
 	token: sequelize.STRING,
 	email: sequelize.STRING,
-	name: sequelize.STRING
+	name: sequelize.STRING,
+
 })
 
 let Media = db.define('media', {
 	video: sequelize.STRING
 })
 
+let Likes = db.define('likes',{
+	person: sequelize.INTEGER,
+	likedvideo:{type: sequelize.STRING, unique: true}
+})
+
 //Define Relations
 User.hasMany(Media)
-Media.belongsTo(User)
 
+Media.hasMany(Likes)
+Likes.belongsTo(Media)
+
+User.hasMany(Likes)
+Likes.belongsTo(User)
 
 var globalFun = ypi.playlistInfo("AIzaSyBqfoN0DrRKAlaqTvz8NoPCKDZkoaX5Zr8", "PLTG9OTg_jhUxfzo8aPKvncqQt6RgUQgaK", (playlistItems) => {
-    // let array = []
-    for (var i = playlistItems.length - 1; i >= 0; i--) {
-    	Media.create({
-    		video: 'https://www.youtube.com/embed/' + playlistItems[i].resourceId.videoId
-    	})
-    }
-    ypi.playlistInfo()
+// let array = []
+for (var i = playlistItems.length - 1; i >= 0; i--) {
+	Media.create({
+		video: 'https://www.youtube.com/embed/' + playlistItems[i].resourceId.videoId
+	})
+}
+ypi.playlistInfo()
 });
 
 
@@ -83,6 +93,51 @@ app.get('/video', (req, res) => {
 		})
 	})
 });
+
+
+
+app.post('/favevideo', (req,res) => {
+	console.log('this is the vid: ' + req.body.video)
+	console.log('user is\n' + req.session.user.id)
+
+	Likes.findOne({
+		where:{
+			likedvideo: req.body.video
+		}
+	}).then ((fave)=>{
+		console.log("Database 1")
+		console.log ("fave:"+fave)
+		if (fave !== req.body.video){
+			console.log("did not like this yet")
+			Likes.create({
+				person: req.session.user.id,
+				likedvideo: req.body.video
+			}).then (()=>{
+				res.send('succes')
+			})
+		} else {
+			Likes.findOne({
+				where:{
+					likedvideo: req.body.video
+				}
+			}).then ((fave)=>{
+				console.log("Database 2")
+				console.log("FAVE :"+fave.likedvideo)
+				if(fave.likedvideo == req.body.video){
+					console.log('already liked')
+					let liked = "already Liked"
+					res.send(fave.likedvideo)
+				}
+
+			})
+		}
+	})
+})
+
+
+
+
+
 
 
 passport.serializeUser((user, done) =>{
@@ -101,6 +156,8 @@ passport.deserializeUser((id, done) =>{
 });
 
 
+
+
 passport.use(new GoogleStrategy({
 	clientID: '218840791548-b7d1m8nffcbnajhcagogff93imsqivvd.apps.googleusercontent.com',
 	clientSecret: 'CGCbZloQ_pclgE6YBjwA8f7-',
@@ -113,41 +170,40 @@ function(accessToken, refreshToken, profile, done) {
 	User.findOne({ where: {'gid' : profile.id }}).then ((user) =>{
 		if (user) {
 
-            // if a user is found, log them in
-            return done(null, user.get({plain:true}))
-        } else {
+        // if a user is found, log them in
+        return done(null, user.get({plain:true}))
+    } else {
 
-        	User.create( {
-        		gid: profile.id,
-        		token: accessToken,
-        		email: profile.emails[0].value,
-        		name: profile.displayName
-        	}).then( (user) => {
-        		console.log( '\nResulting user:\n' )
-        		return done(null, user.get({plain:true}));
-        	} )
-        }
-    })
+    	User.create( {
+    		gid: profile.id,
+    		token: accessToken,
+    		email: profile.emails[0].value,
+    		name: profile.displayName
+    	}).then( (user) => {
+    		console.log( '\nResulting user:\n' )
+    		return done(null, user.get({plain:true}));
+    	} )
+    }
+})
 }))
 
 
 
- // route for home page
- app.get('/', (req, res)=>{
- 	res.render('index', { 
- 		user: req.user 
- 	});
- });
+// route for home page
+app.get('/', (req, res)=>{
+	res.render('index', { 
+		user: req.user 
+	});
+});
 
 // route for showing the profile page
 app.get('/profile', isLoggedIn, (req, res) =>{
-	User.findOne({ 
-		where: {
-			id: req.user.id
-		}
-	}).then((user)=>{
+	req.session.user = {id: req.user.id}
+	Likes.findAll({
+	}).then((post)=>{
 		res.render('profile', {
-			user : req.user
+			user : req.user,
+			like: post
 		});
 	})
 });
@@ -170,7 +226,7 @@ app.get('/auth/google/callback', passport.authenticate('google', {
 })
 
 
-db.sync({force: false}).then(db => {
+db.sync({force: true}).then(db => {
 	console.log('We synced bruh!')
 })
 

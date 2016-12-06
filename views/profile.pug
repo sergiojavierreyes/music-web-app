@@ -9,8 +9,9 @@ html
 
 		h3 My Faves!
 		each thing in like
-			p=thing.likedvideo
+			iframe(class="video" name="abc_frame" width='560', height='315', src=thing.likedvideo, frameborder='0', allowfullscreen='')
+
 
 	script(src="/resources/js/jquery-3.1.1.min.js")
-	script(src="/resources/js/custom.js")
+	//- script(src="/resources/js/custom.js")
 	script(src='https://apis.google.com/js/platform.js', async='', defer='')

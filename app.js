@@ -54,7 +54,7 @@ let User = db.define('user', {
 })
 
 let Media = db.define('media', {
-	video: sequelize.STRING
+	video: {type: sequelize.STRING, unique: true}
 })
 
 let Likes = db.define('likes',{
@@ -200,7 +200,11 @@ app.get('/', (req, res)=>{
 app.get('/profile', isLoggedIn, (req, res) =>{
 	req.session.user = {id: req.user.id}
 	Likes.findAll({
+		where: {
+			person: req.session.user.id
+		}
 	}).then((post)=>{
+		console.log('THIS IS THE POST: ' + post)
 		res.render('profile', {
 			user : req.user,
 			like: post
@@ -226,7 +230,7 @@ app.get('/auth/google/callback', passport.authenticate('google', {
 })
 
 
-db.sync({force: true}).then(db => {
+db.sync({force: false}).then(db => {
 	console.log('We synced bruh!')
 })
 

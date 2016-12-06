@@ -35,4 +35,14 @@ $(document).ready(function(){
 			$('#' + counter).show()
 		})
 	})
+
+	//bootstrap part
+	$('#faya').click(function() {
+		$(location).attr('href', 'http://localhost:8000/auth/google')
+	})
+
+
+
+
+
 })

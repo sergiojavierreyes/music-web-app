@@ -1,7 +1,12 @@
 html
 	head
 		title ATL Music Gen
+	link(rel='stylesheet', type='text/css', href='resources/css/bootstrap.min.css')
+	link(rel='stylesheet', type='text/css', href='resources/css/main.css')
+
 	body
+		nav.navbar.navbar-inverse
+		p.navbar-text ALT MUSIC GEN
 		a(href='/logout') Logout
 		a(href='/Profile') My Profile
 		- for ( i = 0 ; i < video.length ; i++)
@@ -12,4 +17,6 @@ html
 
 
 	script(src="/resources/js/jquery-3.1.1.min.js")
+	script(src="/resources/js/bootstrap.min.js")
 	script(src="/resources/js/custom.js")
+	script(src='https://apis.google.com/js/platform.js', async='', defer='')

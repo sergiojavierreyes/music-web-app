@@ -1,11 +1,28 @@
 html
 	head
-		title Node Authentication
+		title ALT MUSIC GEN
+	link(rel='stylesheet', type='text/css', href='resources/css/bootstrap.min.css')
+
+	link(rel='stylesheet', type='text/css', href='resources/css/main.css')
+	
 	body
-		h1 Node Authentication
-		p login with:
-		a(href='/auth/google') Google
+		nav.navbar.navbar-light(style='background-color: #ffff;')
+			.nav.navbar-nav
+			ul.nav.nav-inline
+				li.nav-item
+					a.nav-link.active#turnoff(href='http://localhost:8000/') ALT MUSIC GEN
+
+
+				//- | ALT MUSIC GEN
+				//- span.sr-only (current)
+	div.container.karel
+		.row
+			.col-lg-12
+				h3 Please log in with your Google account
+				h4 by hitting the Sign In button
+				button.btn.btn-default#faya(type='button') Sign In
 
 	script(src="/resources/js/jquery-3.1.1.min.js")
+	script(src="/resources/js/bootstrap.min.js")
 	script(src="/resources/js/custom.js")
 	script(src='https://apis.google.com/js/platform.js', async='', defer='')

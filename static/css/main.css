@@ -1,0 +1,52 @@
+body {
+  background-image: url("https://images.unsplash.com/photo-1465823290694-4cd9b2248419?dpr=2&auto=format&fit=crop&w=1500&h=1000&q=80&cs=tinysrgb&crop=");
+  -webkit-background-size: cover;
+  -moz-background-size: cover;
+  -o-background-size: cover;
+  background-size: cover;
+  font: 100% "Times New Roman", Times, serif; }
+
+.navbar {
+  font-family: "Times New Roman", Times, serif;
+  font-size: 20px; }
+  .navbar a.nav-link.active {
+    color: white;
+    position: absolute;
+    left: 0;
+    text-align: left;
+    margin: 12.5 auto;
+    padding-left: 10px; }
+
+.karel {
+  text-align: left;
+  position: absolute;
+  color: white; }
+  .karel h4 {
+    position: relative;
+    bottom: 10px; }
+
+.btn.btn-default {
+  font-family: "Times New Roman", Times, serif;
+  font-weight: bold; }
+
+#favBar h3, #favBar h5 {
+  text-align: center;
+  position: relative;
+  bottom: 50px; }
+
+.linkSec {
+  color: white;
+  left: 0;
+  text-align: right;
+  font-family: "Times New Roman", Times, serif;
+  font-size: 20px; }
+
+h5#higher {
+  position: relative;
+  bottom: 80px; }
+
+.video {
+  margin-bottom: 30px; }
+
+.opzij {
+  margin-right: 20px; }

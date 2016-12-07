@@ -5,15 +5,25 @@ html
 	link(rel='stylesheet', type='text/css', href='resources/css/main.css')
 
 	body
-		nav.navbar.navbar-inverse
-		p.navbar-text ALT MUSIC GEN
-		a(href='/logout') Logout
-		a(href='/Profile') My Profile
-		- for ( i = 0 ; i < video.length ; i++)
-			iframe(id=i class="video" name="abc_frame" width='560', height='315', src=video[i].video frameborder='0', allowfullscreen='')
-		br
-		button#add(type='button' name='video') Shiiiiit... I lyk dis.
-		button#update(type='button') Bruh... Next please!
+		nav.navbar.navbar-light(style='background-color: #ffff;')
+			.nav.navbar-nav
+			ul.nav.nav-inline
+				li.nav-item
+					a.nav-link.active#turnoff(href='http://localhost:8000/') ALT MUSIC GEN
+	.container.linkSec
+		.row
+			.col-lg-12
+				a(href='/logout') Logout
+				br
+				a(href='/Profile') My Profile
+	.container.karel
+		.row
+			.col-lg-6#favBar
+				- for ( i = 0 ; i < video.length ; i++)
+					iframe(id=i class="video" name="abc_frame" width='560', height='315', src=video[i].video frameborder='0', allowfullscreen='')
+				br
+				button.btn.btn-default#add(type='button' name='video' class='opzij') Shiiiiit... I lyk dis!
+				button.btn.btn-default#update(type='button') Bruh... Next please!
 
 
 	script(src="/resources/js/jquery-3.1.1.min.js")

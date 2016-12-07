@@ -106,7 +106,7 @@ app.post('/favevideo', (req,res) => {
 		}
 	}).then ((fave)=>{
 		console.log("Database 1")
-		console.log ("fave:"+fave)
+		console.log ("fave:" + fave)
 		if (fave !== req.body.video){
 			console.log("did not like this yet")
 			Likes.create({
